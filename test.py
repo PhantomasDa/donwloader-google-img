@@ -10,8 +10,6 @@ def createFolder(directory):
             os.makedirs(directory)
     except OSError:
         print ('Error: Creating directory. ' +  directory)
-# Example
-# Creates a folder in the current directory called data
 
 
 def search_google(search_query):
@@ -23,7 +21,7 @@ def search_google(search_query):
         # open browser and begin search
         browser.get(search_url)
         elements = browser.find_elements_by_class_name('rg_i')
-        print("abriendo buscador...")
+        # print("abriendo buscador...")
         count = 0
         for e in elements:
             # get images source url
@@ -37,38 +35,40 @@ def search_google(search_query):
                  big_img = element[1].find_element_by_tag_name("img")
 
             images_url.append(big_img.get_attribute("src"))
-            print("Guardando")
+            # print("Guardando")
 
             # write image to file
             
             reponse = requests.get(images_url[count])
             if reponse.status_code == 200:
-                with open(f"{query_string}.png","wb") as file:    
+                with open(f"{query_string}{count+1}.png","wb") as file:    
                     file.write(reponse.content)
-                print("imagen descargada :D")
+                # print("imagen descargada :D")
            
-
-
             count += 1
             createFolder(f'{query_string}')
-            shutil.move(f'{quer_string}.png', '{query_string}')
+            # shutil.move(f'{quer_string}.png', '{query_string}')
 
             # Stop get and save after 5
             if count == 5:
                 break
         return images_url
-    except Exception as e:
-        print("esto es un error")
-        return
+    except (RuntimeError, TypeError, NameError, OSError):
+        return images_url
+        # print("esto es un error")
+    except:
+        return images_url    
+   
 
 
+
+# Leer el documento y definir query_string
 Products= pd.read_csv('Producto.csv')
 List_Name = Products['Nombre']
-
 sizeCicle = len(List_Name)
 
 for i in List_Name:
     print(i, end=" " +'\n')
     query_string = i
     items = search_google(query_string)
-    time.sleep(10)
+    time.sleep(5)
