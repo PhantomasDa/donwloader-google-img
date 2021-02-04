@@ -46,7 +46,6 @@ def search_google(search_query):
                 # print("imagen descargada :D")
            
             count += 1
-            createFolder(f'{query_string}')
             # shutil.move(f'{quer_string}.png', '{query_string}')
 
             # Stop get and save after 5
@@ -54,9 +53,11 @@ def search_google(search_query):
                 break
         return images_url
     except (RuntimeError, TypeError, NameError, OSError):
+        print(f'{query_string} ERROR.1')
         return images_url
-        # print("esto es un error")
+        
     except:
+        print(f'{query_string} ERROR.2')
         return images_url    
    
 
@@ -67,8 +68,11 @@ Products= pd.read_csv('Producto.csv')
 List_Name = Products['Nombre']
 sizeCicle = len(List_Name)
 
+
 for i in List_Name:
-    print(i, end=" " +'\n')
+    print(i, end="Completo" +'\n')
     query_string = i
     items = search_google(query_string)
+    createFolder(f'{query_string}')
+
     time.sleep(5)
